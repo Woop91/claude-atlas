@@ -21,6 +21,7 @@ export function createWebGPUBackend() {
   let cpuPosMirror = null;
   let physMod = null;
   let readbackInFlight = false;
+  let resizeHandler = null;
 
   function viewBytes() {
     const { x, y, w, h } = camFrac;
@@ -97,7 +98,8 @@ export function createWebGPUBackend() {
       canvasEl = canvas;
       resizeCanvasForDevice(canvas);
       ({ device, format, context } = await createDevice(canvas));
-      window.addEventListener("resize", () => resizeCanvasForDevice(canvas));
+      resizeHandler = () => resizeCanvasForDevice(canvas);
+      window.addEventListener("resize", resizeHandler);
       const graphSrc = await loadWGSL("./shaders/graph.wgsl");
       const bgSrc    = await loadWGSL("./shaders/background.wgsl");
       const physSrc  = await loadWGSL("./shaders/physics.wgsl");
@@ -145,6 +147,7 @@ export function createWebGPUBackend() {
       if (bgPipe) bgPipe.destroy();
       if (physics) physics.destroy();
       if (clickHandler && canvasEl) canvasEl.removeEventListener("click", clickHandler);
+      if (resizeHandler) window.removeEventListener("resize", resizeHandler);
     },
   };
 }
