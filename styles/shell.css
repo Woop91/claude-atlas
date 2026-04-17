@@ -133,3 +133,6 @@ input, textarea, select, button {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0s !important; transition-duration: var(--d-micro) !important; }
 }
+.skip-link { position: absolute; top: -100px; left: 10px; z-index: 200;
+  padding: 8px 12px; background: var(--bg-2); color: var(--fg-1); border: 1px solid var(--line); border-radius: var(--r-sm); }
+.skip-link:focus { top: 10px; }

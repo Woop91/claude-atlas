@@ -86,6 +86,9 @@ async function main() {
     switchView(next);
     updateTopbar(next);
     updateBottom(next);
+    const main = document.getElementById("view");
+    main.setAttribute("aria-busy", "true");
+    queueMicrotask(() => main.setAttribute("aria-busy", "false"));
   });
 
   store.patch({ ready: true });

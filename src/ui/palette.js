@@ -86,6 +86,17 @@ export function mountPalette(dataset, api) {
     if (opened) {
       if (typeof query === "string") { input.value = query; rerender(query); }
       input.focus();
+      overlay.addEventListener("keydown", trapFocus, { once: false });
     }
   };
+}
+
+function trapFocus(e) {
+  if (e.key !== "Tab") return;
+  const focusable = e.currentTarget.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])');
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 }
