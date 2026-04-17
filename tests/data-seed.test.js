@@ -88,3 +88,15 @@ describe("data seed — quizzes", () => {
     }
   });
 });
+
+describe("data seed — concepts", () => {
+  it("has at least 2 concept nodes", () => {
+    const c = DATASET.nodes.filter((n) => n.kind === "concept");
+    expect(c.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("concept nodes are not in the neuromap view", () => {
+    const c = DATASET.nodes.filter((n) => n.kind === "concept");
+    for (const n of c) expect(n.views).not.toContain("neuromap");
+  });
+});
