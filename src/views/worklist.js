@@ -53,6 +53,16 @@ function renderQuizPanel(quizzes, state) {
   return `<div class="wl-quiz-list">${quizzes.map((q) => renderQuiz(q, state[q.id] ?? null)).join("")}</div>`;
 }
 
+function renderInsight(n) {
+  return `
+    <article class="wl-insight" data-role="wl-insight-card" id="wl-${n.id.replace(/\./g, "-")}">
+      <h3>${escapeHtml(n.name)}</h3>
+      <p class="wl-insight-lede">${escapeHtml(n.oneLine)}</p>
+      <p class="wl-insight-body">${escapeHtml(n.description)}</p>
+    </article>
+  `;
+}
+
 export function mountWorklist(dataset, api) {
   const root = document.getElementById("view");
   const commands = dataset.nodes.filter((n) => n.domain === "worklist" && n.kind === "command");
@@ -71,7 +81,9 @@ export function mountWorklist(dataset, api) {
       <section data-role="wl-panel" data-tab="quiz" hidden>
         ${renderQuizPanel(dataset.quizzes, quizState)}
       </section>
-      <section data-role="wl-panel" data-tab="insights" hidden></section>
+      <section data-role="wl-panel" data-tab="insights" hidden>
+        ${dataset.nodes.filter((n) => n.kind === "concept").map(renderInsight).join("")}
+      </section>
     </div>
   `;
 

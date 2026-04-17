@@ -66,3 +66,13 @@ describe("worklist view — quiz tab", () => {
     expect(api.highlight).toHaveBeenCalled();
   });
 });
+
+describe("worklist view — insights tab", () => {
+  it("renders one card per concept node", () => {
+    mountWorklist(DATASET, { focus: vi.fn(), highlight: vi.fn() });
+    document.querySelector('[data-role="wl-tab"][data-tab="insights"]').click();
+    const cards = document.querySelectorAll('[data-role="wl-insight-card"]');
+    const expected = DATASET.nodes.filter((n) => n.kind === "concept").length;
+    expect(cards.length).toBe(expected);
+  });
+});
