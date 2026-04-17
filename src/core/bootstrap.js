@@ -2,6 +2,11 @@ import { DATASET } from "../data/data.js";
 import { createStore } from "./store.js";
 import { createRouter, VIEWS } from "./router.js";
 import { createMockBackend } from "../render/mock-backend.js";
+import { mountTopbar } from "../ui/topbar.js";
+import { mountBottomTabs } from "../ui/bottom-tabs.js";
+import { mountNeuromap } from "../views/neuromap.js";
+import { mountReference } from "../views/reference.js";
+import { mountWorklist } from "../views/worklist.js";
 
 const store = createStore({
   view: "neuromap",
@@ -15,23 +20,50 @@ const store = createStore({
 const router = createRouter();
 const backend = createMockBackend();
 
+const api = {
+  go: (v) => router.go(v),
+  focus: (id) => store.patch({ focusedId: id }),
+  highlight: (ids) => { backend.setHighlight(ids); store.patch({ highlight: ids }); },
+  openPalette: () => store.patch({ paletteOpen: true }),
+};
+
+const VIEW_MOUNTERS = {
+  neuromap: mountNeuromap,
+  reference: mountReference,
+  worklist: mountWorklist,
+};
+
+let unmountCurrent = null;
+
+function switchView(view) {
+  if (unmountCurrent) { unmountCurrent(); unmountCurrent = null; }
+  const mounter = VIEW_MOUNTERS[view];
+  unmountCurrent = mounter(DATASET, api);
+  document.getElementById("shell").dataset.view = view;
+}
+
 async function main() {
   const canvas = document.getElementById("gpu");
   await backend.init(canvas);
   backend.loadScene(DATASET.nodes, DATASET.edges);
 
   router.start();
-  store.patch({ view: router.current(), ready: true });
+  const initialView = router.current();
+  store.patch({ view: initialView });
 
-  router.subscribe((next) => store.patch({ view: next }));
+  const updateTopbar = mountTopbar({ currentView: initialView }, api);
+  const updateBottom = mountBottomTabs({ currentView: initialView }, api);
 
-  document.getElementById("shell").dataset.view = store.get().view;
-  store.subscribe((s, p) => {
-    if (s.view !== p.view) {
-      document.getElementById("shell").dataset.view = s.view;
-    }
+  switchView(initialView);
+
+  router.subscribe((next) => {
+    store.patch({ view: next });
+    switchView(next);
+    updateTopbar(next);
+    updateBottom(next);
   });
 
+  store.patch({ ready: true });
   document.body.dataset.ready = "true";
 }
 
@@ -41,4 +73,4 @@ main().catch((err) => {
   throw err;
 });
 
-export { store, router, backend, VIEWS };
+export { store, router, backend, VIEWS, api };
