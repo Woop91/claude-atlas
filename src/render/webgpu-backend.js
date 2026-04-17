@@ -5,7 +5,7 @@ import { createNodesPipeline } from "./webgpu/nodes.js";
 import { createEdgesPipeline } from "./webgpu/edges.js";
 import { createBackgroundPipeline } from "./webgpu/background.js";
 import { createGpuPhysics } from "./webgpu/physics.js";
-import { pickNearestNode } from "./webgl2/picker.js";
+import { pickNearestNode } from "./common/picker.js";
 
 export function createWebGPUBackend() {
   let device = null, format = null, context = null;

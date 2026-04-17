@@ -6,7 +6,7 @@ import { createEdgesPipeline } from "./webgl2/edges.js";
 import { createBackgroundPipeline } from "./webgl2/background.js";
 import { createPhysics } from "./webgl2/physics.js";
 import { createAnimLoop } from "./webgl2/anim.js";
-import { pickNearestNode } from "./webgl2/picker.js";
+import { pickNearestNode } from "./common/picker.js";
 
 /**
  * Factory for the WebGL2 RenderBackend. Conforms to the BACKEND_METHODS

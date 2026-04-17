@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { pickNearestNode } from "../src/render/webgl2/picker.js";
+import { pickNearestNode } from "../src/render/common/picker.js";
 
 describe("pickNearestNode", () => {
   it("returns the nearest node within radius", () => {
