@@ -95,7 +95,9 @@ export function createWebGL2Backend() {
     setCameraFraction(rect) { camFrac = rect; },
     render(tSeconds = 0) {
       if (!ctx || !physics) return;
-      physics.step();
+      const reduceMotion = typeof window !== "undefined"
+        && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      if (!reduceMotion) physics.step();
       ctx.gl.clearColor(0.028, 0.028, 0.060, 1);
       ctx.gl.clear(ctx.gl.COLOR_BUFFER_BIT);
       ctx.gl.enable(ctx.gl.BLEND);
