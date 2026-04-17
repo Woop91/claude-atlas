@@ -48,3 +48,36 @@ input, textarea, select, button {
   font-family: inherit;
   font-size: 16px;
 }
+
+/* top bar */
+#topbar {
+  position: fixed; inset: 0 0 auto 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px;
+  height: 56px;
+  background: linear-gradient(to bottom, rgba(7,7,15,0.9), rgba(7,7,15,0));
+  z-index: 10;
+}
+#topbar .tb-left [data-role="wordmark"] {
+  font-family: var(--ff-display); font-weight: 700; letter-spacing: 0.1em;
+  color: var(--fg-1);
+}
+#topbar .tb-center { display: flex; gap: 4px; }
+#topbar [data-role="view-tab"] {
+  background: transparent; border: 0; color: var(--fg-2);
+  padding: 6px 12px; border-radius: var(--r-sm); cursor: pointer;
+  font-size: 13px; text-transform: capitalize;
+  transition: color var(--d-micro) var(--ease), background var(--d-micro) var(--ease);
+}
+#topbar [data-role="view-tab"]:hover { color: var(--fg-1); background: var(--bg-2); }
+#topbar [data-role="view-tab"][aria-current="page"] { color: var(--fg-1); background: var(--bg-3); }
+#topbar [data-role="palette-hint"] {
+  background: var(--bg-2); border: 1px solid var(--line);
+  color: var(--fg-2); padding: 4px 10px; border-radius: var(--r-sm);
+  cursor: pointer; font-size: 12px; display: flex; gap: 6px; align-items: center;
+}
+#topbar .kbd { font-family: var(--ff-mono); font-size: 11px; }
+
+@media (max-width: 480px) {
+  #topbar .tb-center { display: none; }  /* mobile: use bottom tabs instead */
+}
