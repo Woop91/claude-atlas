@@ -22,11 +22,11 @@ export function createWebGL2Backend() {
   let clickHandler = null;
 
   function view() {
-    // construct a 3x3 matrix from camFrac that maps world-[-1,1] to clip-[-1+2x, -1+2(x+w)]
+    // Maps physics world [-200, 200] → clip subregion determined by camFrac.
     const { x, y, w, h } = camFrac;
-    const sx = w, sy = h;
+    const worldHalf = 200; // physics bounds/2
+    const sx = w / worldHalf, sy = h / worldHalf;
     const tx = (x + w / 2) * 2 - 1, ty = -((y + h / 2) * 2 - 1);
-    // column-major 3x3
     return new Float32Array([sx, 0, 0,  0, sy, 0,  tx, ty, 1]);
   }
 
@@ -83,7 +83,7 @@ export function createWebGL2Backend() {
       if (clickHandler) canvasEl.removeEventListener("click", clickHandler);
       clickHandler = (ev) => {
         const rect = canvasEl.getBoundingClientRect();
-        const world = screenToWorld(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
+        const world = screenToWorld(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height, camFrac);
         const id = pickNearestNode(world, physics.positions, nodeIds, { radius: 20 });
         if (id) canvasEl.dispatchEvent(new CustomEvent("atlas:pick", { detail: { id } }));
       };
@@ -119,7 +119,11 @@ export function createWebGL2Backend() {
   };
 }
 
-function screenToWorld(sx, sy, w, h) {
-  // placeholder — world units scale with camFrac; world [-200, 200] → screen [0, w]
-  return { x: (sx / w - 0.5) * 400, y: (0.5 - sy / h) * 400 };
+function screenToWorld(sx, sy, w, h, cf) {
+  // Inverse of view(): screen → NDC → physics world (±200) factoring the active camFrac subregion.
+  const ndcX = (sx / w) * 2 - 1;
+  const ndcY = 1 - (sy / h) * 2;
+  const tx = (cf.x + cf.w / 2) * 2 - 1;
+  const ty = -((cf.y + cf.h / 2) * 2 - 1);
+  return { x: (ndcX - tx) / cf.w * 200, y: (ndcY - ty) / cf.h * 200 };
 }
