@@ -63,3 +63,28 @@ describe("data seed — worklist commands", () => {
     for (const c of wl) expect(c.name).toMatch(/^wl /);
   });
 });
+
+describe("data seed — quizzes", () => {
+  it("has at least 3 quiz questions", () => {
+    expect(DATASET.quizzes.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("every quiz has at least 2 choices and a valid correctChoiceId", () => {
+    for (const q of DATASET.quizzes) {
+      expect(q.choices.length).toBeGreaterThanOrEqual(2);
+      const ids = q.choices.map((c) => c.id);
+      expect(ids, `bad correctChoiceId on ${q.id}`).toContain(q.correctChoiceId);
+    }
+  });
+
+  it("every quiz choice nodeId references an existing worklist node", () => {
+    const ids = new Set(DATASET.nodes.map((n) => n.id));
+    for (const q of DATASET.quizzes) {
+      for (const c of q.choices) {
+        for (const nid of c.nodeIds) {
+          expect(ids, `quiz ${q.id} choice ${c.id} has unknown node ${nid}`).toContain(nid);
+        }
+      }
+    }
+  });
+});

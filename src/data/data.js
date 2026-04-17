@@ -513,7 +513,68 @@ const nodes = [
 const edges = [];
 
 /** @type {import("./schema.js").Quiz[]} */
-const quizzes = [];
+const quizzes = [
+  {
+    id: "q.claim-before-edit",
+    prompt: "You want to work on item #42. What do you run first?",
+    choices: [
+      { id: "a", text: "wl note 42", nodeIds: ["wl.note"] },
+      { id: "b", text: "wl claim 42", nodeIds: ["wl.claim"] },
+      { id: "c", text: "wl done 42", nodeIds: ["wl.done"] },
+      { id: "d", text: "wl reopen 42", nodeIds: ["wl.reopen"] },
+    ],
+    correctChoiceId: "b",
+    explanation: "Claim before touching an item — this locks it so other sessions can't work on the same thing at the same time.",
+  },
+  {
+    id: "q.finish-item",
+    prompt: "You've finished coding your item and want to mark it complete. Which command do you use?",
+    choices: [
+      { id: "a", text: "wl release", nodeIds: ["wl.release"] },
+      { id: "b", text: "wl sync", nodeIds: ["wl.sync"] },
+      { id: "c", text: "wl done", nodeIds: ["wl.done"] },
+      { id: "d", text: "wl render", nodeIds: ["wl.render"] },
+    ],
+    correctChoiceId: "c",
+    explanation: "wl done checks the item back in AND marks it complete. wl release just gives it up without marking it done.",
+  },
+  {
+    id: "q.release-vs-done",
+    prompt: "You need to pause your work on an item and let someone else pick it up. Which command frees the item WITHOUT marking it complete?",
+    choices: [
+      { id: "a", text: "wl done", nodeIds: ["wl.done"] },
+      { id: "b", text: "wl release", nodeIds: ["wl.release"] },
+      { id: "c", text: "wl reopen", nodeIds: ["wl.reopen"] },
+      { id: "d", text: "wl list", nodeIds: ["wl.list"] },
+    ],
+    correctChoiceId: "b",
+    explanation: "wl release checks an item back in (giving it up or pausing) without marking it done — another session can then claim it.",
+  },
+  {
+    id: "q.sync-after-done",
+    prompt: "After marking an item done, what do you run to push the updated worklist state to the shared repo?",
+    choices: [
+      { id: "a", text: "wl render", nodeIds: ["wl.render"] },
+      { id: "b", text: "wl status", nodeIds: ["wl.status"] },
+      { id: "c", text: "wl list", nodeIds: ["wl.list"] },
+      { id: "d", text: "wl sync", nodeIds: ["wl.sync"] },
+    ],
+    correctChoiceId: "d",
+    explanation: "wl sync does git pull + push to synchronize shared worklist state across all sessions.",
+  },
+  {
+    id: "q.add-new-task",
+    prompt: "A user reports a new bug. Which command creates a new worklist entry for it?",
+    choices: [
+      { id: "a", text: "wl note", nodeIds: ["wl.note"] },
+      { id: "b", text: "wl add", nodeIds: ["wl.add"] },
+      { id: "c", text: "wl scope", nodeIds: ["wl.scope"] },
+      { id: "d", text: "wl request", nodeIds: ["wl.request"] },
+    ],
+    correctChoiceId: "b",
+    explanation: "wl add creates a brand-new task on the worklist. wl request/bug/ops change the TYPE of an existing item, not create a new one.",
+  },
+];
 
 /** @type {import("./schema.js").Dataset} */
 export const DATASET = Object.freeze(validateDataset({
