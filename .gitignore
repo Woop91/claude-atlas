@@ -8,3 +8,4 @@ Thumbs.db
 .env*
 /src/fonts/*.woff2
 !/src/fonts/.gitkeep
+tests/e2e-artifacts/
