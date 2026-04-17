@@ -1,0 +1,37 @@
+.ref-root { padding: 72px 20px 24px; max-width: 860px; margin: 0 auto; overflow-y: auto; max-height: 100vh; }
+.ref-tabs {
+  display: flex; gap: 4px; padding: 4px;
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r-md);
+  position: sticky; top: 72px; z-index: 5;
+  margin-bottom: 24px;
+}
+.ref-tabs button {
+  background: transparent; border: 0; color: var(--fg-2); padding: 8px 14px;
+  border-radius: var(--r-sm); cursor: pointer; font-size: 13px;
+  transition: color var(--d-micro) var(--ease), background var(--d-micro) var(--ease);
+}
+.ref-tabs button[aria-selected="true"] { color: var(--fg-1); background: var(--bg-3); }
+.ref-entry {
+  padding: 18px 16px 20px; border-bottom: 1px solid var(--line);
+  scroll-margin-top: 140px;
+}
+.ref-entry header { display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; }
+.ref-badge {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.1em;
+  padding: 2px 6px; border-radius: 3px;
+  background: hsl(var(--hue) 40% 20%); color: hsl(var(--hue) 85% 72%);
+}
+.ref-entry h2 { font-size: 20px; font-weight: 600; font-family: var(--ff-body); letter-spacing: -0.01em; }
+.ref-lede { color: var(--fg-2); font-size: 14px; margin-bottom: 12px; }
+.ref-body { color: var(--fg-1); font-size: 15px; line-height: 1.7; margin-bottom: 12px; }
+.ref-body p + p { margin-top: 12px; }
+.ref-entry pre {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 10px 12px; margin: 10px 0; overflow-x: auto;
+}
+.ref-entry pre code { font-family: var(--ff-mono); font-size: 12px; color: var(--fg-1); }
+.ref-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 12px; }
+.ref-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 999px;
+  background: var(--bg-2); color: var(--fg-3); border: 1px solid var(--line);
+}
