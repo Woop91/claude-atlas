@@ -24,7 +24,7 @@ export function createPhysics({ count, bounds = 400 }) {
     damping: 0.85,
     centerPull: 0.002,
     theta: 0.8,
-    step() {
+    step(dt = 1/60) {
       const half = bounds;
       const qt = createQuadtree({ x: -half, y: -half, size: 2 * half });
       for (let i = 0; i < count; i++) {
@@ -61,8 +61,8 @@ export function createPhysics({ count, bounds = 400 }) {
           positions[2*i + 1] = pinned[2*i + 1];
           velocities[2*i]    = 0; velocities[2*i + 1] = 0;
         } else {
-          positions[2*i]     += velocities[2*i];
-          positions[2*i + 1] += velocities[2*i + 1];
+          positions[2*i]     += velocities[2*i]     * dt * 60;
+          positions[2*i + 1] += velocities[2*i + 1] * dt * 60;
         }
       }
     },

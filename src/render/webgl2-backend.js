@@ -67,7 +67,7 @@ export function createWebGL2Backend() {
       nodes = createNodesPipeline(ctx.gl, graphSrc);
       edges = createEdgesPipeline(ctx.gl, graphSrc);
       bg    = createBackgroundPipeline(ctx.gl, bgSrc);
-      loop = createAnimLoop((t) => this.render(t));
+      loop = createAnimLoop((t, dt) => this.render(t, dt));
       loop.start();
     },
     loadScene(dsNodes, dsEdges) {
@@ -93,11 +93,11 @@ export function createWebGL2Backend() {
     setFocus(id) { focusId = id; },
     setHighlight(ids) { highlightSet = new Set(ids); },
     setCameraFraction(rect) { camFrac = rect; },
-    render(tSeconds = 0) {
+    render(tSeconds = 0, dt = 1/60) {
       if (!ctx || !physics) return;
       const reduceMotion = typeof window !== "undefined"
         && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      if (!reduceMotion) physics.step();
+      if (!reduceMotion) physics.step(dt);
       ctx.gl.clearColor(0.028, 0.028, 0.060, 1);
       ctx.gl.clear(ctx.gl.COLOR_BUFFER_BIT);
       ctx.gl.enable(ctx.gl.BLEND);
