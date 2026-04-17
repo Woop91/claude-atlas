@@ -49,4 +49,16 @@ describe("createRouter", () => {
     r.go("reference"); // does not throw but also doesn't notify
     expect(spy).not.toHaveBeenCalled();
   });
+
+  it("does not double-notify when async hashchange fires after go()", async () => {
+    const r = createRouter();
+    const spy = vi.fn();
+    r.start();
+    r.subscribe(spy);
+    r.go("reference");
+    expect(spy).toHaveBeenCalledTimes(1);
+    // give jsdom's async hashchange event a chance to fire
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
 });
