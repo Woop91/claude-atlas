@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Claude Atlas</title>
+  <meta name="color-scheme" content="dark" />
+  <link rel="stylesheet" href="./styles/shell.css" />
+</head>
+<body>
+  <canvas id="gpu" aria-hidden="true"></canvas>
+  <div id="shell" data-view="neuromap">
+    <header id="topbar" role="banner"></header>
+    <main id="view" role="main" aria-live="polite"></main>
+    <nav id="bottom-tabs" role="navigation" aria-label="Views"></nav>
+    <div id="overlays" aria-live="polite"></div>
+  </div>
+  <script type="module" src="./src/core/bootstrap.js"></script>
+</body>
+</html>
