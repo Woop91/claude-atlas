@@ -1,0 +1,22 @@
+{
+  "name": "claude-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Unified, WebGPU-driven explorer for Claude tools and worklist commands.",
+  "scripts": {
+    "dev": "http-server -c-1 -p 4173 -s",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "fmt": "prettier --write ."
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "vitest": "^2.1.9",
+    "prettier": "^3.3.3",
+    "@types/node": "^20.14.11"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
