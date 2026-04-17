@@ -1,0 +1,62 @@
+/* Claude Atlas — design tokens. Mirrored into shader uniforms at boot. */
+:root {
+  /* surface */
+  --bg-0: #07070f;
+  --bg-1: #0d0d14;
+  --bg-2: #15151f;
+  --bg-3: #1e1e2c;
+  --line: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.14);
+
+  /* text */
+  --fg-1: #f2f0f8;
+  --fg-2: #a6a4b8;
+  --fg-3: #605f70;
+
+  /* hue wheel (shared with WGSL/GLSL uniforms) */
+  --hue-pink: 340;
+  --hue-purple: 265;
+  --hue-cyan: 192;
+  --hue-green: 150;
+  --hue-amber: 42;
+  --hue-orange: 18;
+
+  /* derived */
+  --accent: hsl(var(--hue-purple) 85% 72%);
+  --accent-dim: hsl(var(--hue-purple) 60% 55%);
+  --ok: hsl(var(--hue-green) 70% 60%);
+  --warn: hsl(var(--hue-amber) 85% 62%);
+  --err: hsl(var(--hue-orange) 85% 62%);
+
+  /* radii */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --d-micro: 120ms;
+  --d-sm: 220ms;
+  --d-md: 350ms;
+  --d-pulse: 900ms;
+
+  /* type */
+  --ff-display: "Syne", system-ui, sans-serif;
+  --ff-body: "Inter", system-ui, sans-serif;
+  --ff-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root[data-theme="warm"] {
+  --bg-0: #0e0a09;
+  --bg-1: #15100c;
+  --bg-2: #1d160f;
+  --bg-3: #261c14;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-md: 120ms;
+    --d-sm: 120ms;
+    --d-pulse: 0ms;
+  }
+}
