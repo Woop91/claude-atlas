@@ -52,6 +52,9 @@ function switchView(view) {
 async function main() {
   const canvas = document.getElementById("gpu");
   await backend.init(canvas);
+  canvas.addEventListener("atlas:pick", (e) => {
+    api.focus(e.detail.id);
+  });
   backend.loadScene(DATASET.nodes, DATASET.edges);
 
   router.start();
