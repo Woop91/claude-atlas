@@ -49,7 +49,7 @@ export function mountReference(dataset, api) {
     </div>
   `;
 
-  root.addEventListener("click", (e) => {
+  function handleClick(e) {
     const tab = e.target.closest('[data-role="ref-domain-tab"]');
     if (!tab) return;
     const domain = tab.dataset.domain;
@@ -62,7 +62,11 @@ export function mountReference(dataset, api) {
         || (domain !== "concept" && s.dataset.domain === domain);
       s.hidden = !match;
     });
-  });
+  }
+  root.addEventListener("click", handleClick);
 
-  return function unmount() { root.innerHTML = ""; };
+  return function unmount() {
+    root.removeEventListener("click", handleClick);
+    root.innerHTML = "";
+  };
 }
