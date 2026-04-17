@@ -2,6 +2,7 @@ import { DATASET } from "../data/data.js";
 import { createStore } from "./store.js";
 import { createRouter, VIEWS } from "./router.js";
 import { createMockBackend } from "../render/mock-backend.js";
+import { createWebGL2Backend } from "../render/webgl2-backend.js";
 import { mountTopbar } from "../ui/topbar.js";
 import { mountBottomTabs } from "../ui/bottom-tabs.js";
 import { mountNeuromap } from "../views/neuromap.js";
@@ -19,7 +20,12 @@ const store = createStore({
 });
 
 const router = createRouter();
-const backend = createMockBackend();
+// Backend selection per spec 7.3. No WebGPU in Plan 03 — that lands in Plan 04.
+// URL override: ?backend=mock|webgl2 for testing
+const forced = new URLSearchParams(location.search).get("backend");
+const backend = forced === "mock" ? createMockBackend()
+               : forced === "webgl2" ? createWebGL2Backend()
+               : createWebGL2Backend();
 
 const api = {
   go: (v) => router.go(v),
