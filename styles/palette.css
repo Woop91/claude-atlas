@@ -1,0 +1,19 @@
+.pl-overlay { position: fixed; inset: 0; z-index: 100; display: grid; place-items: start center; padding-top: 12vh; }
+.pl-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); }
+.pl-dialog { position: relative; width: min(640px, 90vw); background: var(--bg-2); border: 1px solid var(--line-2); border-radius: var(--r-lg); overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
+.pl-input { width: 100%; padding: 16px 20px; background: transparent; border: 0; color: var(--fg-1); font-size: 16px; outline: 0; border-bottom: 1px solid var(--line); }
+.pl-results { max-height: 48vh; overflow-y: auto; }
+.pl-row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
+  width: 100%; text-align: left; padding: 10px 16px;
+  background: transparent; border: 0; color: var(--fg-1); cursor: pointer;
+  border-bottom: 1px solid var(--line);
+}
+.pl-row:hover, .pl-row:focus-visible { background: var(--bg-3); }
+.pl-badge { font-family: var(--ff-mono); font-size: 10px; padding: 2px 6px; border-radius: 3px;
+  background: hsl(var(--hue) 40% 20%); color: hsl(var(--hue) 85% 72%); letter-spacing: 0.1em; }
+.pl-name { font-weight: 500; font-family: var(--ff-mono); font-size: 13px; }
+.pl-one { color: var(--fg-2); font-size: 13px; }
+.pl-domain { color: var(--fg-3); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; grid-column: 4; }
+.pl-footer { display: flex; gap: 16px; padding: 8px 16px; font-size: 11px; color: var(--fg-3); border-top: 1px solid var(--line); background: var(--bg-1); }
+.pl-footer kbd { font-family: var(--ff-mono); padding: 1px 4px; border: 1px solid var(--line); border-radius: 3px; background: var(--bg-2); }

@@ -7,6 +7,7 @@ import { mountBottomTabs } from "../ui/bottom-tabs.js";
 import { mountNeuromap } from "../views/neuromap.js";
 import { mountReference } from "../views/reference.js";
 import { mountWorklist } from "../views/worklist.js";
+import { mountPalette } from "../ui/palette.js";
 
 const store = createStore({
   view: "neuromap",
@@ -55,6 +56,30 @@ async function main() {
   const updateBottom = mountBottomTabs({ currentView: initialView }, api);
 
   switchView(initialView);
+
+  // palette
+  const updatePalette = mountPalette(DATASET, {
+    opened: false,
+    onClose: () => store.patch({ paletteOpen: false }),
+    go: api.go,
+    focus: api.focus,
+  });
+  store.subscribe((s, p) => {
+    if (s.paletteOpen !== p.paletteOpen) updatePalette({ opened: s.paletteOpen });
+  });
+
+  // global hotkey
+  window.addEventListener("keydown", (e) => {
+    const isMeta = e.metaKey || e.ctrlKey;
+    if (isMeta && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      api.openPalette();
+    } else if (e.key === "Escape" && store.get().paletteOpen) {
+      store.patch({ paletteOpen: false });
+    } else if (!isMeta && ["1","2","3"].includes(e.key) && e.target === document.body) {
+      api.go(VIEWS[Number(e.key) - 1]);
+    }
+  });
 
   router.subscribe((next) => {
     store.patch({ view: next });
