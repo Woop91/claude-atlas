@@ -1,8 +1,4 @@
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;",
-  }[c]));
-}
+import { escapeHtml } from "../core/html.js";
 
 function score(text, query) {
   if (!query) return 1;

@@ -1,3 +1,5 @@
+import { escapeHtml } from "../core/html.js";
+
 const DOMAINS = [
   { id: "all", label: "All" },
   { id: "claude", label: "Claude Tools" },
@@ -24,12 +26,6 @@ function renderEntry(n) {
       <div class="ref-tags">${tags}</div>
     </section>
   `;
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;",
-  }[c]));
 }
 
 export function mountReference(dataset, api) {
