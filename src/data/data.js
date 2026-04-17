@@ -574,7 +574,6 @@ const edges = [
   { source: "wl.add",     target: "wl.claim",   kind: "related",  weight: 0.6 },
   { source: "wl.add",     target: "wl.request", kind: "related",  weight: 0.5 },
   { source: "wl.bug",     target: "wl.add",     kind: "related",  weight: 0.6 },
-  { source: "wl.request", target: "wl.add",     kind: "related",  weight: 0.5 },
   { source: "wl.scope",   target: "wl.list",    kind: "related",  weight: 0.6 },
   { source: "wl.ops",     target: "wl.sync",    kind: "related",  weight: 0.5 },
   { source: "wl.render",  target: "wl.list",    kind: "related",  weight: 0.5 },
