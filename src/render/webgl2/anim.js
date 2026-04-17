@@ -19,10 +19,13 @@ export function createAnimLoop(onFrame) {
   }
   function start() { running = true; rafId = requestAnimationFrame(tick); }
   function stop()  { running = false; cancelAnimationFrame(rafId); }
-  if (typeof document !== "undefined") {
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stop(); else start();
-    });
-  }
-  return { start, stop };
+  const onVis = () => { if (document.hidden) stop(); else start(); };
+  if (typeof document !== "undefined") document.addEventListener("visibilitychange", onVis);
+  return {
+    start, stop,
+    dispose() {
+      stop();
+      if (typeof document !== "undefined") document.removeEventListener("visibilitychange", onVis);
+    },
+  };
 }

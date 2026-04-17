@@ -109,7 +109,7 @@ export function createWebGL2Backend() {
       nodes.draw(view(), 20);
     },
     destroy() {
-      if (loop) loop.stop();
+      if (loop) { if (loop.dispose) loop.dispose(); else loop.stop(); }
       if (nodes) nodes.destroy();
       if (edges) edges.destroy();
       if (bg) bg.destroy();
