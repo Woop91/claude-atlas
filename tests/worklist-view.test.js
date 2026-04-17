@@ -24,3 +24,45 @@ describe("worklist view — commands tab", () => {
     expect(entries.length).toBe(expected);
   });
 });
+
+describe("worklist view — quiz tab", () => {
+  it("renders one card per quiz question", () => {
+    mountWorklist(DATASET, { focus: vi.fn(), highlight: vi.fn() });
+    document.querySelector('[data-role="wl-tab"][data-tab="quiz"]').click();
+    const cards = document.querySelectorAll('[data-role="wl-quiz-card"]');
+    expect(cards.length).toBe(DATASET.quizzes.length);
+  });
+
+  it("shows explanation after selecting a choice", () => {
+    mountWorklist(DATASET, { focus: vi.fn(), highlight: vi.fn() });
+    document.querySelector('[data-role="wl-tab"][data-tab="quiz"]').click();
+    const firstChoice = document.querySelector('[data-role="wl-choice"]');
+    firstChoice.click();
+    const card = firstChoice.closest('[data-role="wl-quiz-card"]');
+    const explanation = card.querySelector('[data-role="wl-explanation"]');
+    expect(explanation.hidden).toBe(false);
+  });
+
+  it("persists correct-count to localStorage", () => {
+    mountWorklist(DATASET, { focus: vi.fn(), highlight: vi.fn() });
+    document.querySelector('[data-role="wl-tab"][data-tab="quiz"]').click();
+    const firstQuiz = DATASET.quizzes[0];
+    const correctButton = document.querySelector(
+      `[data-role="wl-choice"][data-quiz="${firstQuiz.id}"][data-choice="${firstQuiz.correctChoiceId}"]`
+    );
+    correctButton.click();
+    const raw = localStorage.getItem("atlas.quiz.v1");
+    expect(raw).toBeTruthy();
+    const state = JSON.parse(raw);
+    expect(state[firstQuiz.id]).toBe(firstQuiz.correctChoiceId);
+  });
+
+  it("highlights related nodes via api.highlight on choice click", () => {
+    const api = { focus: vi.fn(), highlight: vi.fn() };
+    mountWorklist(DATASET, api);
+    document.querySelector('[data-role="wl-tab"][data-tab="quiz"]').click();
+    const firstChoice = document.querySelector('[data-role="wl-choice"]');
+    firstChoice.click();
+    expect(api.highlight).toHaveBeenCalled();
+  });
+});

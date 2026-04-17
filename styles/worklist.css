@@ -23,3 +23,17 @@
 .wl-lede { color: var(--fg-2); font-size: 13px; margin-bottom: 10px; }
 .wl-cmd pre { background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 12px; margin-top: 8px; overflow-x: auto; }
 .wl-cmd pre code { font-family: var(--ff-mono); font-size: 12px; color: var(--fg-1); }
+.wl-quiz-card { padding: 16px; margin-bottom: 14px; background: var(--bg-1); border: 1px solid var(--line); border-radius: var(--r-md); }
+.wl-prompt { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: var(--fg-1); }
+.wl-choices { display: flex; flex-direction: column; gap: 6px; }
+.wl-choice {
+  text-align: left; padding: 10px 14px; border-radius: var(--r-sm);
+  background: var(--bg-2); border: 1px solid var(--line); color: var(--fg-1);
+  cursor: pointer; font-size: 14px; min-height: 44px;
+  transition: background var(--d-micro) var(--ease), border-color var(--d-micro) var(--ease);
+}
+.wl-choice:hover:not([disabled]) { background: var(--bg-3); }
+.wl-choice.is-correct { background: color-mix(in srgb, var(--ok) 18%, var(--bg-2)); border-color: var(--ok); color: var(--fg-1); }
+.wl-choice.is-wrong { background: color-mix(in srgb, var(--err) 18%, var(--bg-2)); border-color: var(--err); color: var(--fg-1); }
+.wl-choice[disabled] { cursor: default; }
+.wl-explanation { margin-top: 12px; color: var(--fg-2); font-size: 13px; line-height: 1.6; padding: 10px 12px; background: var(--bg-2); border-left: 2px solid var(--accent); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
