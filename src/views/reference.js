@@ -35,11 +35,12 @@ export function mountReference(dataset, api) {
     <div class="ref-root">
       <nav class="ref-tabs" role="tablist">
         ${DOMAINS.map((d) => `
-          <button type="button" role="tab" data-role="ref-domain-tab" data-domain="${d.id}"
+          <button type="button" role="tab" id="ref-tab-${d.id}" aria-controls="ref-list"
+                  data-role="ref-domain-tab" data-domain="${d.id}"
                   ${d.id === "all" ? 'aria-selected="true"' : 'aria-selected="false"'}>${d.label}</button>
         `).join("")}
       </nav>
-      <div class="ref-list">
+      <div class="ref-list" id="ref-list" role="region" aria-live="polite">
         ${nodes.map(renderEntry).join("")}
       </div>
     </div>

@@ -67,17 +67,17 @@ export function mountWorklist(dataset, api) {
   root.innerHTML = `
     <div class="wl-root">
       <nav class="wl-tabs" role="tablist">
-        <button type="button" role="tab" data-role="wl-tab" data-tab="commands" aria-selected="true">Commands</button>
-        <button type="button" role="tab" data-role="wl-tab" data-tab="quiz" aria-selected="false">Quiz</button>
-        <button type="button" role="tab" data-role="wl-tab" data-tab="insights" aria-selected="false">Insights</button>
+        <button type="button" role="tab" id="wl-tab-commands" aria-controls="wl-panel-commands" data-role="wl-tab" data-tab="commands" aria-selected="true">Commands</button>
+        <button type="button" role="tab" id="wl-tab-quiz" aria-controls="wl-panel-quiz" data-role="wl-tab" data-tab="quiz" aria-selected="false">Quiz</button>
+        <button type="button" role="tab" id="wl-tab-insights" aria-controls="wl-panel-insights" data-role="wl-tab" data-tab="insights" aria-selected="false">Insights</button>
       </nav>
-      <section data-role="wl-panel" data-tab="commands">
+      <section data-role="wl-panel" data-tab="commands" role="tabpanel" id="wl-panel-commands" aria-labelledby="wl-tab-commands">
         ${commands.map(renderCommand).join("")}
       </section>
-      <section data-role="wl-panel" data-tab="quiz" hidden>
+      <section data-role="wl-panel" data-tab="quiz" hidden role="tabpanel" id="wl-panel-quiz" aria-labelledby="wl-tab-quiz">
         ${renderQuizPanel(dataset.quizzes, quizState)}
       </section>
-      <section data-role="wl-panel" data-tab="insights" hidden>
+      <section data-role="wl-panel" data-tab="insights" hidden role="tabpanel" id="wl-panel-insights" aria-labelledby="wl-tab-insights">
         ${dataset.nodes.filter((n) => n.kind === "concept").map(renderInsight).join("")}
       </section>
     </div>
