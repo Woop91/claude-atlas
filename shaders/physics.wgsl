@@ -23,7 +23,7 @@ struct Edge {
 @group(0) @binding(4) var<storage, read> pinned: array<vec2f>;  // NaN encodes "not pinned"
 
 @compute @workgroup_size(64)
-fn repel_and_integrate(@builtin(global_invocation_id) gid: vec3u) {
+fn repel(@builtin(global_invocation_id) gid: vec3u) {
   let i = gid.x;
   if (i >= P.n) { return; }
   let me = positions[i];

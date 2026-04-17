@@ -37,7 +37,7 @@ export async function createGpuPhysics({ device, module, count, edges, bounds = 
     device.queue.writeBuffer(edgeBuf, 0, ab);
   }
 
-  const repelPipe = device.createComputePipeline({ layout: "auto", compute: { module, entryPoint: "repel_and_integrate" } });
+  const repelPipe = device.createComputePipeline({ layout: "auto", compute: { module, entryPoint: "repel" } });
   const springPipe = device.createComputePipeline({ layout: "auto", compute: { module, entryPoint: "springs" } });
   const integratePipe = device.createComputePipeline({ layout: "auto", compute: { module, entryPoint: "integrate" } });
 
