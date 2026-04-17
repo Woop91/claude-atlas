@@ -20,6 +20,7 @@ export function createWebGPUBackend() {
   let viewBuffer = null, frameBuffer = null;
   let cpuPosMirror = null;
   let physMod = null;
+  let readbackInFlight = false;
 
   function viewBytes() {
     const { x, y, w, h } = camFrac;
@@ -42,7 +43,13 @@ export function createWebGPUBackend() {
       const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
       if (!reduce) physics.step(1/60);
       // read back positions every frame for picker (best-effort; async)
-      physics.readbackPositions().then((arr) => { cpuPosMirror = arr; }).catch(() => {});
+      if (!readbackInFlight) {
+        readbackInFlight = true;
+        physics.readbackPositions()
+          .then((arr) => { cpuPosMirror = arr; })
+          .catch((e) => { if (!String(e?.message ?? "").includes("destroyed")) console.warn("[atlas] readback failed:", e); })
+          .finally(() => { readbackInFlight = false; });
+      }
       // upload node + edge instance buffers from the latest cpuPosMirror (if available)
       if (cpuPosMirror) {
         const nodesArr = new Float32Array(nodeIds.length * 4);
