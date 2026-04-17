@@ -1,7 +1,10 @@
 import { linkProgram } from "./shaders.js";
 
 export function createBackgroundPipeline(gl, glslSrc) {
-  const prog = linkProgram(gl, `#define VERT\n${glslSrc}`, glslSrc);
+  // VERT flag selects the vertex branch; fragment uses default. Inject after #version.
+  const vsSrc = glslSrc.replace(/^(#version[^\n]*\n)/, "$1#define VERT\n");
+  const fsSrc = glslSrc;
+  const prog = linkProgram(gl, vsSrc, fsSrc);
   const uTime = gl.getUniformLocation(prog, "u_time");
   const vao = gl.createVertexArray();
   return {

@@ -5,8 +5,11 @@ import { linkProgram } from "./shaders.js";
  * accepts position/hue/highlight updates via updateInstances().
  */
 export function createNodesPipeline(gl, glslSrc) {
-  // graph.glsl is a combined file; node program uses the #ifndef EDGE branches
-  const prog = linkProgram(gl, `#define NODE\n${glslSrc}`, `#define NODE\n${glslSrc}`);
+  // graph.glsl is a combined file. VERT flag selects vertex stage; omitting EDGE selects node branch.
+  // Defines must go AFTER #version (GLSL: #version must be the first directive).
+  const vsSrc = glslSrc.replace(/^(#version[^\n]*\n)/, "$1#define VERT\n");
+  const fsSrc = glslSrc;
+  const prog = linkProgram(gl, vsSrc, fsSrc);
   const aCorner = gl.getAttribLocation(prog, "a_corner");
   const aNode   = gl.getAttribLocation(prog, "a_node");
   const uView   = gl.getUniformLocation(prog, "u_view");

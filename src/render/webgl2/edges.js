@@ -1,7 +1,10 @@
 import { linkProgram } from "./shaders.js";
 
 export function createEdgesPipeline(gl, glslSrc) {
-  const prog = linkProgram(gl, `#define EDGE\n${glslSrc}`, `#define EDGE\n${glslSrc}`);
+  // VERT+EDGE for vertex stage, EDGE alone for fragment. Inject after #version.
+  const vsSrc = glslSrc.replace(/^(#version[^\n]*\n)/, "$1#define VERT\n#define EDGE\n");
+  const fsSrc = glslSrc.replace(/^(#version[^\n]*\n)/, "$1#define EDGE\n");
+  const prog = linkProgram(gl, vsSrc, fsSrc);
   const aCorner  = gl.getAttribLocation(prog, "a_corner");
   const aSegment = gl.getAttribLocation(prog, "a_segment");
   const aWeight  = gl.getAttribLocation(prog, "a_weight");

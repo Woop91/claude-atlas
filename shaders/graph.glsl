@@ -1,15 +1,14 @@
 #version 300 es
-// ----- VERTEX (node & edge draw) -----
-// Build flag: pass -DEDGE when linking the edge program, otherwise nodes.
+// Combined vertex+fragment shader for nodes (default) and edges (when EDGE defined).
+// Stage is selected by VERT define: with VERT → vertex, without → fragment.
 
+#ifdef VERT
+// ===== VERTEX STAGE =====
 #ifdef EDGE
-// per-vertex quad corner (0..1)
 in vec2 a_corner;
-// per-instance: x,y of source and x,y of target
 in vec4 a_segment;
-// per-instance: weight in [0,1]
 in float a_weight;
-uniform mat3 u_view; // world → clip
+uniform mat3 u_view;
 out float v_weight;
 void main() {
   vec2 a = a_segment.xy;
@@ -22,13 +21,11 @@ void main() {
   gl_Position = vec4(clip.xy, 0.0, 1.0);
   v_weight = a_weight;
 }
-
 #else
-// node: per-instance x,y,hue,highlight
-in vec2 a_corner;           // quad corner 0..1
-in vec4 a_node;              // xy = pos, z = hue (radians), w = highlight in [0,1]
+in vec2 a_corner;
+in vec4 a_node;
 uniform mat3 u_view;
-uniform float u_size;         // pixel size in world units
+uniform float u_size;
 out vec2 v_uv;
 out float v_hue;
 out float v_highlight;
@@ -42,9 +39,19 @@ void main() {
 }
 #endif
 
-// ----- FRAGMENT (node) -----
-#ifndef EDGE
-in vec2 v_uv; in float v_hue; in float v_highlight;
+#else
+// ===== FRAGMENT STAGE =====
+precision highp float;
+#ifdef EDGE
+in float v_weight;
+out vec4 o_col;
+void main() {
+  o_col = vec4(1.0, 1.0, 1.0, v_weight * 0.35);
+}
+#else
+in vec2 v_uv;
+in float v_hue;
+in float v_highlight;
 out vec4 o_col;
 vec3 hslToRgb(float h, float s, float l) {
   float c = (1.0 - abs(2.0 * l - 1.0)) * s;
@@ -70,12 +77,6 @@ void main() {
   float alpha = disc + halo * (0.25 + v_highlight * 0.5);
   o_col = vec4(bright * alpha, alpha);
 }
+#endif
 
-// ----- FRAGMENT (edge) -----
-#else
-in float v_weight;
-out vec4 o_col;
-void main() {
-  o_col = vec4(1.0, 1.0, 1.0, v_weight * 0.35);
-}
 #endif
