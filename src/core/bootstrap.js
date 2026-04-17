@@ -40,6 +40,12 @@ const VIEW_MOUNTERS = {
   worklist: mountWorklist,
 };
 
+const CAMERA_FRAC = {
+  neuromap:  { x: 0, y: 0, w: 1,    h: 1 },
+  reference: { x: 0, y: 0, w: 0.33, h: 1 },
+  worklist:  { x: 0, y: 0, w: 0.33, h: 1 },
+};
+
 let unmountCurrent = null;
 
 function switchView(view) {
@@ -47,6 +53,7 @@ function switchView(view) {
   const mounter = VIEW_MOUNTERS[view];
   unmountCurrent = mounter(DATASET, api);
   document.getElementById("shell").dataset.view = view;
+  backend.setCameraFraction(CAMERA_FRAC[view] ?? CAMERA_FRAC.neuromap);
 }
 
 async function main() {
