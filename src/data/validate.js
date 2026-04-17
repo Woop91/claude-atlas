@@ -15,6 +15,7 @@ export function validateDataset(ds) {
 
   const ids = new Set();
   for (const n of ds.nodes) {
+    if (!n || typeof n !== "object") throw new Error("dataset.nodes contains a non-object entry");
     if (!n.id || typeof n.id !== "string") throw new Error("node missing id");
     if (ids.has(n.id)) throw new Error(`duplicate node id: ${n.id}`);
     ids.add(n.id);
@@ -22,7 +23,9 @@ export function validateDataset(ds) {
     if (!DOMAINS.includes(n.domain)) throw new Error(`invalid domain on ${n.id}: ${n.domain}`);
     if (!n.name) throw new Error(`node ${n.id} missing name`);
     if (!n.category) throw new Error(`node ${n.id} missing category`);
-    if (!n.badge || typeof n.badge.hue !== "number") throw new Error(`node ${n.id} missing badge.hue`);
+    if (!n.badge || !Number.isFinite(n.badge.hue) || n.badge.hue < 0 || n.badge.hue > 360) {
+      throw new Error(`node ${n.id} badge.hue must be a finite number in 0..360`);
+    }
     if (!n.oneLine) throw new Error(`node ${n.id} missing oneLine`);
     if (!n.description) throw new Error(`node ${n.id} missing description`);
     if (!Array.isArray(n.tags)) throw new Error(`node ${n.id} tags must be array`);
@@ -35,15 +38,17 @@ export function validateDataset(ds) {
   }
 
   for (const e of ds.edges) {
+    if (!e || typeof e !== "object") throw new Error("dataset.edges contains a non-object entry");
     if (!ids.has(e.source)) throw new Error(`edge source unknown node: ${e.source}`);
     if (!ids.has(e.target)) throw new Error(`edge target unknown node: ${e.target}`);
     if (!EDGE_KINDS.includes(e.kind)) throw new Error(`invalid edge kind: ${e.kind}`);
-    if (typeof e.weight !== "number" || e.weight < 0 || e.weight > 1) {
-      throw new Error(`edge weight must be 0..1, got ${e.weight}`);
+    if (!Number.isFinite(e.weight) || e.weight < 0 || e.weight > 1) {
+      throw new Error(`edge weight must be a finite number in 0..1, got ${e.weight}`);
     }
   }
 
   for (const q of ds.quizzes) {
+    if (!q || typeof q !== "object") throw new Error("dataset.quizzes contains a non-object entry");
     if (!q.id) throw new Error("quiz missing id");
     if (!Array.isArray(q.choices) || q.choices.length < 2) {
       throw new Error(`quiz ${q.id} must have at least 2 choices`);

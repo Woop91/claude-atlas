@@ -67,4 +67,25 @@ describe("validateDataset", () => {
     };
     expect(() => validateDataset(ds)).toThrow(/correctChoiceId/i);
   });
+
+  it("rejects edges with NaN weight", () => {
+    const ds = {
+      nodes: [okNode],
+      edges: [{ source: "tool.read", target: "tool.read", kind: "related", weight: NaN }],
+      quizzes: [],
+      version: "0.1.0",
+    };
+    expect(() => validateDataset(ds)).toThrow(/finite/i);
+  });
+
+  it("rejects badges with hue outside 0..360", () => {
+    const bad = { ...okNode, id: "x", badge: { label: "X", hue: 400 } };
+    const ds = { nodes: [okNode, bad], edges: [], quizzes: [], version: "0.1.0" };
+    expect(() => validateDataset(ds)).toThrow(/badge\.hue/i);
+  });
+
+  it("rejects null entries in nodes array", () => {
+    const ds = { nodes: [okNode, null], edges: [], quizzes: [], version: "0.1.0" };
+    expect(() => validateDataset(ds)).toThrow(/non-object/i);
+  });
 });
