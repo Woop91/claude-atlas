@@ -27,4 +27,18 @@ describe("data seed — claude tools", () => {
       expect(t.description.length).toBeGreaterThan(0);
     }
   });
+
+  it("every claude tool description is ≥60 characters", () => {
+    const tools = DATASET.nodes.filter((n) => n.domain === "claude" && n.kind === "tool");
+    for (const t of tools) {
+      expect(t.description.length, `description too short for ${t.id}`).toBeGreaterThanOrEqual(60);
+    }
+  });
+
+  it("every claude tool has a syntax line", () => {
+    const tools = DATASET.nodes.filter((n) => n.domain === "claude" && n.kind === "tool");
+    for (const t of tools) {
+      expect(t.syntax, `missing syntax for ${t.id}`).toBeTruthy();
+    }
+  });
 });
