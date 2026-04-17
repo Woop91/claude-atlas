@@ -560,7 +560,45 @@ const nodes = [
 ];
 
 /** @type {import("./schema.js").Edge[]} */
-const edges = [];
+const edges = [
+  // sequence: worklist workflow chain
+  { source: "wl.list",    target: "wl.claim",   kind: "sequence", weight: 0.9 },
+  { source: "wl.claim",   target: "wl.note",    kind: "sequence", weight: 0.9 },
+  { source: "wl.note",    target: "wl.sync",    kind: "sequence", weight: 0.8 },
+  { source: "wl.sync",    target: "wl.done",    kind: "sequence", weight: 0.9 },
+
+  // related: worklist co-usage pairs
+  { source: "wl.claim",   target: "wl.release", kind: "related",  weight: 0.7 },
+  { source: "wl.done",    target: "wl.reopen",  kind: "related",  weight: 0.6 },
+  { source: "wl.list",    target: "wl.status",  kind: "related",  weight: 0.7 },
+  { source: "wl.add",     target: "wl.claim",   kind: "related",  weight: 0.6 },
+  { source: "wl.add",     target: "wl.request", kind: "related",  weight: 0.5 },
+  { source: "wl.bug",     target: "wl.add",     kind: "related",  weight: 0.6 },
+  { source: "wl.request", target: "wl.add",     kind: "related",  weight: 0.5 },
+  { source: "wl.scope",   target: "wl.list",    kind: "related",  weight: 0.6 },
+  { source: "wl.ops",     target: "wl.sync",    kind: "related",  weight: 0.5 },
+  { source: "wl.render",  target: "wl.list",    kind: "related",  weight: 0.5 },
+  { source: "wl.help",    target: "wl.list",    kind: "related",  weight: 0.4 },
+  { source: "wl.release", target: "wl.reopen",  kind: "related",  weight: 0.5 },
+  { source: "wl.note",    target: "wl.done",    kind: "related",  weight: 0.6 },
+
+  // related: claude tool composition pairs
+  { source: "tool.firecrawl",      target: "tool.playwright_cli",  kind: "related", weight: 0.6 },
+  { source: "tool.21st_dev",       target: "tool.ui_ux_pro_max",   kind: "related", weight: 0.7 },
+  { source: "tool.21st_dev",       target: "tool.google_fonts",    kind: "related", weight: 0.6 },
+  { source: "tool.google_fonts",   target: "tool.awesome_design",  kind: "related", weight: 0.6 },
+  { source: "tool.composio",       target: "tool.google_workspace", kind: "related", weight: 0.6 },
+  { source: "tool.mcp_servers",    target: "tool.composio",         kind: "related", weight: 0.5 },
+  { source: "tool.autodream",      target: "tool.webgpu_skill",    kind: "related", weight: 0.5 },
+  { source: "tool.valyu",          target: "tool.firecrawl",       kind: "related", weight: 0.5 },
+  { source: "tool.shannon",        target: "tool.playwright_cli",  kind: "related", weight: 0.6 },
+  { source: "tool.taste_skill",    target: "tool.ui_ux_pro_max",   kind: "related", weight: 0.7 },
+  { source: "tool.impeccable",     target: "tool.taste_skill",     kind: "related", weight: 0.6 },
+
+  // related: tool ↔ worklist support
+  { source: "tool.firecrawl",   target: "wl.add",   kind: "related", weight: 0.4 },
+  { source: "tool.playwright_cli", target: "wl.bug", kind: "related", weight: 0.5 },
+];
 
 /** @type {import("./schema.js").Quiz[]} */
 const quizzes = [

@@ -100,3 +100,23 @@ describe("data seed — concepts", () => {
     for (const n of c) expect(n.views).not.toContain("neuromap");
   });
 });
+
+describe("data seed — edges", () => {
+  it("has at least 10 edges", () => {
+    expect(DATASET.edges.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it("has at least 4 worklist sequence edges forming a chain", () => {
+    const seq = DATASET.edges.filter((e) => e.kind === "sequence");
+    expect(seq.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("every sequence edge connects worklist-domain nodes", () => {
+    const byId = new Map(DATASET.nodes.map((n) => [n.id, n]));
+    const seq = DATASET.edges.filter((e) => e.kind === "sequence");
+    for (const e of seq) {
+      expect(byId.get(e.source)?.domain).toBe("worklist");
+      expect(byId.get(e.target)?.domain).toBe("worklist");
+    }
+  });
+});
