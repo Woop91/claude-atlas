@@ -19,6 +19,7 @@ export function createWebGPUBackend() {
   let clickHandler = null;
   let viewBuffer = null, frameBuffer = null;
   let cpuPosMirror = null;
+  let physMod = null;
 
   function viewBytes() {
     const { x, y, w, h } = camFrac;
@@ -95,7 +96,7 @@ export function createWebGPUBackend() {
       const physSrc  = await loadWGSL("./shaders/physics.wgsl");
       const graphMod = await createModule(device, graphSrc, "graph.wgsl");
       const bgMod    = await createModule(device, bgSrc, "background.wgsl");
-      const physMod  = await createModule(device, physSrc, "physics.wgsl");
+      physMod        = await createModule(device, physSrc, "physics.wgsl");
 
       viewBuffer  = device.createBuffer({ size: 32, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
       frameBuffer = device.createBuffer({ size: 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
@@ -112,7 +113,7 @@ export function createWebGPUBackend() {
         .map((e) => ({ sourceIdx: idx.get(e.source), targetIdx: idx.get(e.target), weight: e.weight ?? 0.5 }))
         .filter((e) => e.sourceIdx !== undefined && e.targetIdx !== undefined);
       const physicsEdges = edgesData.map((e) => ({ source: e.sourceIdx, target: e.targetIdx, rest: 60, weight: e.weight }));
-      physics = await createGpuPhysics({ device, module: await createModule(device, await loadWGSL("./shaders/physics.wgsl"), "physics.wgsl"), count: nodeIds.length, edges: physicsEdges });
+      physics = await createGpuPhysics({ device, module: physMod, count: nodeIds.length, edges: physicsEdges });
       if (clickHandler) canvasEl.removeEventListener("click", clickHandler);
       clickHandler = (ev) => {
         if (!cpuPosMirror) return;
