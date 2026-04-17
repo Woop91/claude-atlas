@@ -82,7 +82,9 @@ export function mountPalette(dataset, api) {
     if (opened) {
       if (typeof query === "string") { input.value = query; rerender(query); }
       input.focus();
-      overlay.addEventListener("keydown", trapFocus, { once: false });
+      overlay.addEventListener("keydown", trapFocus);
+    } else {
+      overlay.removeEventListener("keydown", trapFocus);
     }
   };
 }
