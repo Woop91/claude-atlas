@@ -41,3 +41,12 @@
 .wl-insight h3 { font-size: 17px; margin-bottom: 6px; color: var(--fg-1); }
 .wl-insight-lede { color: var(--accent); font-size: 13px; margin-bottom: 10px; font-weight: 500; }
 .wl-insight-body { color: var(--fg-1); font-size: 14px; line-height: 1.7; }
+
+@media (max-width: 768px) {
+  .wl-root { padding: 64px 14px 20px; }
+  .wl-tabs { top: 64px; }
+}
+@media (max-width: 480px) {
+  .wl-root { padding: 64px 12px 80px; }
+  .wl-choice { padding: 12px 14px; min-height: 48px; font-size: 15px; }
+}

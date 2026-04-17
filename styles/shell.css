@@ -121,3 +121,15 @@ input, textarea, select, button {
 .nm-placeholder .nm-hint { color: var(--fg-3); font-size: 13px; margin-bottom: 12px; }
 .nm-placeholder .nm-count { color: var(--fg-1); font-size: 20px; margin-bottom: 12px; }
 .nm-placeholder .nm-hint2 { color: var(--fg-3); font-size: 13px; }
+
+/* canvas + shell stacking */
+#gpu { position: fixed; inset: 0; z-index: 0; background: var(--bg-0); }
+#shell { position: relative; z-index: 1; height: 100dvh; }
+#view { height: calc(100dvh - 56px); }
+
+@media (max-width: 480px) {
+  #view { height: calc(100dvh - 56px - 64px); /* bottom tabs */ }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0s !important; transition-duration: var(--d-micro) !important; }
+}
