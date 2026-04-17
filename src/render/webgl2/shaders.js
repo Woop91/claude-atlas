@@ -30,7 +30,12 @@ export function linkProgram(gl, vsSrc, fsSrc) {
 
 /** Fetch shader source from the shaders/ directory. */
 export async function loadShader(path) {
-  const res = await fetch(path);
-  if (!res.ok) throw new Error(`shader fetch failed: ${path} ${res.status}`);
+  // Resolve relative to the module's URL so subpath deploys still find shaders.
+  // From src/render/webgl2/shaders.js, shaders/ is at ../../../shaders/<name>.
+  const resolved = path.startsWith("./shaders/")
+    ? new URL(`../../../${path.slice(2)}`, import.meta.url)
+    : new URL(path, import.meta.url);
+  const res = await fetch(resolved);
+  if (!res.ok) throw new Error(`shader fetch failed: ${resolved} ${res.status}`);
   return await res.text();
 }

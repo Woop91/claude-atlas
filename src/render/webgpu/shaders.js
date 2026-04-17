@@ -3,8 +3,11 @@ const cache = new Map();
 /** Fetch a WGSL source by path (relative to page). Cached across calls. */
 export async function loadWGSL(path) {
   if (cache.has(path)) return cache.get(path);
-  const res = await fetch(path);
-  if (!res.ok) throw new Error(`wgsl fetch failed: ${path} ${res.status}`);
+  const resolved = path.startsWith("./shaders/")
+    ? new URL(`../../../${path.slice(2)}`, import.meta.url)
+    : new URL(path, import.meta.url);
+  const res = await fetch(resolved);
+  if (!res.ok) throw new Error(`wgsl fetch failed: ${resolved} ${res.status}`);
   const src = await res.text();
   cache.set(path, src);
   return src;
