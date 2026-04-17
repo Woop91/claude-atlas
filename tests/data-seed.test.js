@@ -42,3 +42,24 @@ describe("data seed — claude tools", () => {
     }
   });
 });
+
+describe("data seed — worklist commands", () => {
+  it("has at least 6 worklist commands", () => {
+    const wl = DATASET.nodes.filter((n) => n.domain === "worklist" && n.kind === "command");
+    expect(wl.length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("every worklist command is in all three views", () => {
+    const wl = DATASET.nodes.filter((n) => n.domain === "worklist" && n.kind === "command");
+    for (const c of wl) {
+      for (const v of ["neuromap", "reference", "worklist"]) {
+        expect(c.views, `${c.id} missing view ${v}`).toContain(v);
+      }
+    }
+  });
+
+  it("worklist command names start with 'wl '", () => {
+    const wl = DATASET.nodes.filter((n) => n.domain === "worklist" && n.kind === "command");
+    for (const c of wl) expect(c.name).toMatch(/^wl /);
+  });
+});
