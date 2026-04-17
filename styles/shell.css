@@ -106,3 +106,17 @@ input, textarea, select, button {
 @media (max-width: 480px) {
   #bottom-tabs { display: flex; }
 }
+
+/* neuromap view */
+.nm-root { padding: 72px 20px 24px; max-width: 1200px; margin: 0 auto; }
+.nm-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 40px; }
+.nm-chip {
+  background: var(--bg-2); border: 1px solid var(--line);
+  color: var(--fg-2); padding: 6px 12px; border-radius: 999px;
+  font-size: 12px; cursor: pointer; text-transform: lowercase;
+}
+.nm-chip[aria-pressed="true"] { color: var(--fg-1); border-color: var(--line-2); }
+.nm-placeholder { text-align: center; padding: 48px 20px; color: var(--fg-2); }
+.nm-placeholder .nm-hint { color: var(--fg-3); font-size: 13px; margin-bottom: 12px; }
+.nm-placeholder .nm-count { color: var(--fg-1); font-size: 20px; margin-bottom: 12px; }
+.nm-placeholder .nm-hint2 { color: var(--fg-3); font-size: 13px; }
