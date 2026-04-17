@@ -24,4 +24,12 @@ describe("mock backend", () => {
       ["render"],
     ]);
   });
+
+  it("BACKEND_METHODS is exhaustive for the mock", () => {
+    const b = createMockBackend();
+    const implemented = Object.keys(b)
+      .filter((k) => typeof b[k] === "function")
+      .sort();
+    expect(implemented).toEqual([...BACKEND_METHODS].sort());
+  });
 });
