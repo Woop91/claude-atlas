@@ -12,4 +12,7 @@ describe("a11y — HTML landmarks & skip link", () => {
   it("nav#bottom-tabs has aria-label", () => {
     expect(html).toMatch(/id="bottom-tabs"[^>]*aria-label=/);
   });
+  it("canvas has role=application", () => {
+    expect(html).toMatch(/<canvas[^>]*role="application"/);
+  });
 });
