@@ -8,8 +8,8 @@ export function mountTopbar({ currentView }, api) {
     </div>
     <div class="tb-center" role="tablist">
       ${VIEWS.map((v) => `
-        <button type="button" data-role="view-tab" data-view="${v}"
-                ${v === currentView ? 'aria-current="page"' : ""}>${v}</button>
+        <button type="button" role="tab" data-role="view-tab" data-view="${v}"
+                ${v === currentView ? 'aria-current="page" aria-selected="true"' : 'aria-selected="false"'}>${v}</button>
       `).join("")}
     </div>
     <div class="tb-right">
@@ -26,8 +26,9 @@ export function mountTopbar({ currentView }, api) {
   });
   return function updateTopbar(view) {
     root.querySelectorAll('[data-role="view-tab"]').forEach((b) => {
-      if (b.dataset.view === view) b.setAttribute("aria-current", "page");
-      else b.removeAttribute("aria-current");
+      const active = b.dataset.view === view;
+      if (active) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+      b.setAttribute("aria-selected", active ? "true" : "false");
     });
   };
 }

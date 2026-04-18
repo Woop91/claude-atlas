@@ -33,7 +33,7 @@
 .ref-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 12px; }
 .ref-tag {
   font-size: 11px; padding: 2px 8px; border-radius: 999px;
-  background: var(--bg-2); color: var(--fg-3); border: 1px solid var(--line);
+  background: var(--bg-2); color: var(--fg-2); border: 1px solid var(--line);
 }
 
 @media (max-width: 768px) {
