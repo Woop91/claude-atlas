@@ -3,12 +3,21 @@ import { test, expect } from "@playwright/test";
 test.describe("Claude Atlas — smoke", () => {
   test("boots without console errors", async ({ page }) => {
     const errors: string[] = [];
-    page.on("pageerror", (e) => errors.push(e.message));
+    const failedUrls: string[] = [];
+    page.on("pageerror", (e) => errors.push(`[pageerror] ${e.message}`));
     page.on("console", (msg) => {
-      if (msg.type() === "error") errors.push(msg.text());
+      if (msg.type() === "error") errors.push(`[console.error] ${msg.text()}`);
+    });
+    page.on("response", (res) => {
+      if (res.status() >= 400) failedUrls.push(`${res.status()} ${res.url()}`);
     });
     await page.goto("/?test=1", { waitUntil: "load" });
     await page.waitForFunction(() => document.body.dataset.ready === "true", { timeout: 15_000 });
+    if (errors.length || failedUrls.length) {
+      console.log("failed URLs:", failedUrls);
+      console.log("console errors:", errors);
+    }
+    expect(failedUrls).toEqual([]);
     expect(errors).toEqual([]);
   });
 
