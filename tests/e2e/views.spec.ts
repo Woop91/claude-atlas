@@ -9,15 +9,13 @@ test.describe("Claude Atlas — views", () => {
     });
   }
 
-  test("view switches via top tabs", async ({ page }) => {
+  test("view switches via visible tabs (top on desktop, bottom on mobile)", async ({ page }) => {
     await page.goto("/?test=1");
     await page.waitForFunction(() => document.body.dataset.ready === "true");
-    await page.click('[data-role="view-tab"][data-view="reference"]');
-    await expect(page.locator('#shell[data-view="reference"]')).toBeVisible();
-    await page.click('[data-role="view-tab"][data-view="worklist"]');
-    await expect(page.locator('#shell[data-view="worklist"]')).toBeVisible();
-    await page.click('[data-role="view-tab"][data-view="neuromap"]');
-    await expect(page.locator('#shell[data-view="neuromap"]')).toBeVisible();
+    for (const view of ["reference", "worklist", "neuromap"] as const) {
+      await page.locator(`[data-view="${view}"]:visible`).first().click();
+      await expect(page.locator(`#shell[data-view="${view}"]`)).toBeVisible();
+    }
   });
 
   test("reference view contains domain tabs and entries", async ({ page }) => {

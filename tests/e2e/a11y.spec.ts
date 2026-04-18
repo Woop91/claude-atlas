@@ -19,7 +19,8 @@ test.describe("Claude Atlas — a11y", () => {
     });
   }
 
-  test("skip link is reachable via keyboard", async ({ page }) => {
+  test("skip link is reachable via keyboard", async ({ page, isMobile }) => {
+    test.skip(isMobile, "mobile device descriptors synthesize touch; Tab keyboard focus is not emulated");
     await page.goto("/?test=1");
     await page.waitForFunction(() => document.body.dataset.ready === "true");
     await page.keyboard.press("Tab");
