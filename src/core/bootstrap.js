@@ -11,6 +11,17 @@ import { mountNeuromap } from "../views/neuromap.js";
 import { mountReference } from "../views/reference.js";
 import { mountWorklist } from "../views/worklist.js";
 import { mountPalette } from "../ui/palette.js";
+import { installSeededRandom } from "./prng.js";
+
+const params = new URLSearchParams(location.search);
+const testSeedRaw = params.get("test");
+export const IS_TEST_MODE = testSeedRaw !== null;
+if (IS_TEST_MODE) {
+  const seed = Number(testSeedRaw) || 42;
+  installSeededRandom(seed); // irreversible for session — test harness controls the tab
+}
+
+document.body.dataset.ready = "loading";
 
 const store = createStore({
   view: "neuromap",
@@ -24,7 +35,7 @@ const store = createStore({
 const router = createRouter();
 // Backend selection per spec 7.3. WebGPU-first with webgl2 fallback (Plan 04).
 // URL override: ?backend=mock|webgl2|webgpu for testing
-const forced = new URLSearchParams(location.search).get("backend");
+const forced = params.get("backend");
 // async detection — module-level await blocks the module load until detectBackend resolves
 const chosen = await detectBackend({ forced, gpu: navigator.gpu ?? null });
 const backend = chosen === "mock"   ? createMockBackend()
