@@ -8,8 +8,8 @@ function renderCommand(n) {
         <h3>${escapeHtml(n.name)}</h3>
       </header>
       <p class="wl-lede">${escapeHtml(n.oneLine)}</p>
-      <pre><code>${escapeHtml(n.syntax ?? n.name)}</code></pre>
-      ${(n.examples ?? []).map((e) => `<pre><code>${escapeHtml(e)}</code></pre>`).join("")}
+      <pre tabindex="0"><code>${escapeHtml(n.syntax ?? n.name)}</code></pre>
+      ${(n.examples ?? []).map((e) => `<pre tabindex="0"><code>${escapeHtml(e)}</code></pre>`).join("")}
     </div>
   `;
 }
@@ -65,7 +65,7 @@ export function mountWorklist(dataset, api) {
   let quizState = loadQuizState();
 
   root.innerHTML = `
-    <div class="wl-root">
+    <div class="wl-root" tabindex="0" aria-label="Worklist content">
       <nav class="wl-tabs" role="tablist">
         <button type="button" role="tab" id="wl-tab-commands" aria-controls="wl-panel-commands" data-role="wl-tab" data-tab="commands" aria-selected="true">Commands</button>
         <button type="button" role="tab" id="wl-tab-quiz" aria-controls="wl-panel-quiz" data-role="wl-tab" data-tab="quiz" aria-selected="false">Quiz</button>

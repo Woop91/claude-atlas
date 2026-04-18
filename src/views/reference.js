@@ -8,9 +8,9 @@ const DOMAINS = [
 ];
 
 function renderEntry(n) {
-  const syntax = n.syntax ? `<pre><code>${escapeHtml(n.syntax)}</code></pre>` : "";
+  const syntax = n.syntax ? `<pre tabindex="0"><code>${escapeHtml(n.syntax)}</code></pre>` : "";
   const examples = (n.examples ?? []).map((e) =>
-    `<pre><code>${escapeHtml(e)}</code></pre>`
+    `<pre tabindex="0"><code>${escapeHtml(e)}</code></pre>`
   ).join("");
   const tags = n.tags.map((t) => `<span class="ref-tag">${escapeHtml(t)}</span>`).join("");
   return `
@@ -32,7 +32,7 @@ export function mountReference(dataset, api) {
   const root = document.getElementById("view");
   const nodes = dataset.nodes.filter((n) => n.views.includes("reference"));
   root.innerHTML = `
-    <div class="ref-root">
+    <div class="ref-root" tabindex="0" aria-label="Reference content">
       <nav class="ref-tabs" role="tablist">
         ${DOMAINS.map((d) => `
           <button type="button" role="tab" id="ref-tab-${d.id}" aria-controls="ref-list"
