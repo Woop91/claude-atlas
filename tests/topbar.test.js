@@ -17,11 +17,11 @@ describe("mountTopbar", () => {
     expect(root.querySelector('[data-role="palette-hint"]')).toBeTruthy();
   });
 
-  it("marks the current view's tab as [aria-current]", () => {
+  it("marks the current view's tab as [aria-selected=true]", () => {
     const api = { openPalette: vi.fn(), go: vi.fn() };
     mountTopbar({ currentView: "reference" }, api);
     const refTab = document.querySelector('[data-role="view-tab"][data-view="reference"]');
-    expect(refTab.getAttribute("aria-current")).toBe("page");
+    expect(refTab.getAttribute("aria-selected")).toBe("true");
   });
 
   it("calls api.go when a tab is clicked", () => {
