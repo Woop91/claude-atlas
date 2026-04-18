@@ -4,6 +4,7 @@ export function mountNeuromap(dataset, api) {
   const root = document.getElementById("view");
   const nodes = dataset.nodes.filter((n) => n.views.includes("neuromap"));
   const categories = [...new Set(nodes.map((n) => n.category))].sort();
+  const active = new Set(categories);
 
   root.innerHTML = `
     <div class="nm-root">
@@ -13,12 +14,31 @@ export function mountNeuromap(dataset, api) {
                   aria-pressed="true">${escapeHtml(c)}</button>
         `).join("")}
       </div>
-      <div class="nm-placeholder" data-role="nm-placeholder">
-        <p class="nm-hint">Graph rendering lands in Plan 03 (WebGL2) and Plan 04 (WebGPU).</p>
-        <p class="nm-count">Dataset: <strong>${nodes.length}</strong> nodes in neuromap view</p>
-        <p class="nm-hint2">Use Reference or Worklist tabs for now.</p>
+      <div class="nm-hud" data-role="nm-hud">
+        <span class="nm-hud-count"><strong>${nodes.length}</strong> nodes</span>
+        <span class="nm-hud-hint">click a node · ⌘K to jump · drag filters to isolate</span>
       </div>
     </div>
   `;
-  return function unmount() { root.innerHTML = ""; };
+
+  function applyHighlight() {
+    const ids = nodes.filter((n) => active.has(n.category)).map((n) => n.id);
+    api.highlight(ids);
+  }
+
+  function handleClick(e) {
+    const chip = e.target.closest('[data-role="nm-filter-chip"]');
+    if (!chip) return;
+    const cat = chip.dataset.category;
+    if (active.has(cat)) { active.delete(cat); chip.setAttribute("aria-pressed", "false"); }
+    else                 { active.add(cat);    chip.setAttribute("aria-pressed", "true"); }
+    applyHighlight();
+  }
+  root.addEventListener("click", handleClick);
+  applyHighlight();
+
+  return function unmount() {
+    root.removeEventListener("click", handleClick);
+    root.innerHTML = "";
+  };
 }

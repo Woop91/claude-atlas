@@ -108,19 +108,31 @@ input, textarea, select, button {
   #bottom-tabs { display: flex; }
 }
 
-/* neuromap view */
-.nm-root { padding: 72px 20px 24px; max-width: 1200px; margin: 0 auto; }
-.nm-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 40px; }
+/* neuromap view — graph is the hero. DOM overlay is minimal, non-blocking. */
+.nm-root { padding: 72px 20px 0; max-width: 1200px; margin: 0 auto; pointer-events: none; }
+.nm-filters { display: flex; flex-wrap: wrap; gap: 6px; pointer-events: auto; }
 .nm-chip {
-  background: var(--bg-2); border: 1px solid var(--line);
-  color: var(--fg-2); padding: 6px 12px; border-radius: 999px;
+  background: rgba(15, 15, 25, 0.72); backdrop-filter: blur(8px);
+  border: 1px solid var(--line); color: var(--fg-2);
+  padding: 6px 12px; border-radius: 999px;
   font-size: 12px; cursor: pointer; text-transform: lowercase;
+  transition: color var(--d-micro) var(--ease), border-color var(--d-micro) var(--ease), opacity var(--d-micro) var(--ease);
 }
 .nm-chip[aria-pressed="true"] { color: var(--fg-1); border-color: var(--line-2); }
-.nm-placeholder { text-align: center; padding: 48px 20px; color: var(--fg-2); }
-.nm-placeholder .nm-hint { color: var(--fg-3); font-size: 13px; margin-bottom: 12px; }
-.nm-placeholder .nm-count { color: var(--fg-1); font-size: 20px; margin-bottom: 12px; }
-.nm-placeholder .nm-hint2 { color: var(--fg-3); font-size: 13px; }
+.nm-chip[aria-pressed="false"] { opacity: 0.45; }
+.nm-chip:hover { color: var(--fg-1); }
+.nm-hud {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: 20px; z-index: 5;
+  display: flex; gap: 16px; align-items: baseline;
+  padding: 8px 16px; border-radius: 999px;
+  background: rgba(15, 15, 25, 0.72); backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  font-size: 12px; color: var(--fg-2); pointer-events: auto;
+}
+.nm-hud-count { color: var(--fg-1); font-family: var(--ff-mono); }
+.nm-hud-hint { color: var(--fg-3); }
+@media (max-width: 480px) { .nm-hud { bottom: 76px; } /* above bottom-tabs */ }
 
 /* canvas + shell stacking */
 #gpu { position: fixed; inset: 0; width: 100dvw; height: 100dvh; z-index: 0; background: var(--bg-0); }
