@@ -7,7 +7,7 @@ import { createBackgroundPipeline } from "./webgpu/background.js";
 import { createGpuPhysics } from "./webgpu/physics.js";
 import { pickNearestNode } from "./common/picker.js";
 
-export function createWebGPUBackend() {
+export function createWebGPUBackend({ maxPhysicsSteps = null } = {}) {
   let device = null, format = null, context = null;
   let nodesPipe = null, edgesPipe = null, bgPipe = null;
   let physics = null;
@@ -122,7 +122,7 @@ export function createWebGPUBackend() {
         .map((e) => ({ sourceIdx: idx.get(e.source), targetIdx: idx.get(e.target), weight: e.weight ?? 0.5 }))
         .filter((e) => e.sourceIdx !== undefined && e.targetIdx !== undefined);
       const physicsEdges = edgesData.map((e) => ({ source: e.sourceIdx, target: e.targetIdx, rest: 60, weight: e.weight }));
-      physics = await createGpuPhysics({ device, module: physMod, count: nodeIds.length, edges: physicsEdges });
+      physics = await createGpuPhysics({ device, module: physMod, count: nodeIds.length, edges: physicsEdges, maxSteps: maxPhysicsSteps });
       if (clickHandler) canvasEl.removeEventListener("click", clickHandler);
       clickHandler = (ev) => {
         if (!cpuPosMirror) return;

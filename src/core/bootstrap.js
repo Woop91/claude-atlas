@@ -38,9 +38,10 @@ const router = createRouter();
 const forced = params.get("backend");
 // async detection — module-level await blocks the module load until detectBackend resolves
 const chosen = await detectBackend({ forced, gpu: navigator.gpu ?? null });
-const backend = chosen === "mock"   ? createMockBackend()
-              : chosen === "webgpu" ? createWebGPUBackend()
-                                    : createWebGL2Backend();
+const backendOpts = IS_TEST_MODE ? { maxPhysicsSteps: 200 } : {};
+const backend = chosen === "mock"    ? createMockBackend()
+              : chosen === "webgpu"  ? createWebGPUBackend(backendOpts)
+                                      : createWebGL2Backend(backendOpts);
 
 const api = {
   go: (v) => router.go(v),

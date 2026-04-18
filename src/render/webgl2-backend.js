@@ -12,7 +12,7 @@ import { pickNearestNode } from "./common/picker.js";
  * Factory for the WebGL2 RenderBackend. Conforms to the BACKEND_METHODS
  * contract from Plan 02. Loads shaders asynchronously during init().
  */
-export function createWebGL2Backend() {
+export function createWebGL2Backend({ maxPhysicsSteps = null } = {}) {
   let ctx = null, nodes = null, edges = null, bg = null, physics = null, loop = null;
   let nodeIds = [], edgesData = [];
   let highlightSet = new Set();
@@ -77,7 +77,7 @@ export function createWebGL2Backend() {
       edgesData = dsEdges
         .map((e) => ({ sourceIdx: idx.get(e.source), targetIdx: idx.get(e.target), weight: e.weight ?? 0.5 }))
         .filter((e) => e.sourceIdx !== undefined && e.targetIdx !== undefined);
-      physics = createPhysics({ count: nodeIds.length, bounds: 400 });
+      physics = createPhysics({ count: nodeIds.length, bounds: 400, maxSteps: maxPhysicsSteps });
       physics.edges = edgesData.map((e) => ({ source: e.sourceIdx, target: e.targetIdx, weight: e.weight, rest: 60 }));
       // click picker
       if (clickHandler) canvasEl.removeEventListener("click", clickHandler);

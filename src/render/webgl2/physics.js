@@ -7,7 +7,7 @@ import { createQuadtree } from "./quadtree.js";
  * - Center gravity
  * - Pinned nodes override velocity each step
  */
-export function createPhysics({ count, bounds = 400 }) {
+export function createPhysics({ count, bounds = 400, maxSteps = null }) {
   const positions = new Float32Array(count * 2);
   const velocities = new Float32Array(count * 2);
   const pinned = new Float32Array(count * 2); // NaN means not pinned
@@ -19,12 +19,16 @@ export function createPhysics({ count, bounds = 400 }) {
   const state = {
     positions, velocities, pinned,
     edges: [],
+    maxSteps,
+    stepsTaken: 0,
     repulsion: 800,
     spring: 0.05,
     damping: 0.85,
     centerPull: 0.002,
     theta: 0.8,
     step(dt = 1/60) {
+      if (state.maxSteps !== null && state.stepsTaken >= state.maxSteps) return;
+      state.stepsTaken += 1;
       const half = bounds;
       const qt = createQuadtree({ x: -half, y: -half, size: 2 * half });
       for (let i = 0; i < count; i++) {

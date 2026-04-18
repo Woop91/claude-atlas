@@ -3,7 +3,7 @@
  * Matches the CPU physics.js API: { positions (Float32Array mirror), step(dt), pin(i,x,y), unpin(i), dispose }.
  * positions mirror is an optional read-back for debugging/picking; populate via copyBufferToBuffer + mapReadAsync.
  */
-export async function createGpuPhysics({ device, module, count, edges, bounds = 400 }) {
+export async function createGpuPhysics({ device, module, count, edges, bounds = 400, maxSteps = null }) {
   const paramsSize = 32; // 2*u32 + 6*f32, padded
   const paramsBuf = device.createBuffer({ size: paramsSize, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const posBuf = device.createBuffer({ size: count * 8, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
@@ -54,9 +54,12 @@ export async function createGpuPhysics({ device, module, count, edges, bounds = 
     });
   }
 
+  let stepsTaken = 0;
   return {
     posBuf, velBuf,
     step(dt = 1/60) {
+      if (maxSteps !== null && stepsTaken >= maxSteps) return;
+      stepsTaken += 1;
       const params = new ArrayBuffer(paramsSize);
       const dv = new DataView(params);
       dv.setUint32(0, count, true);
